@@ -19,7 +19,7 @@ http.createServer((request, response) => {
 
     //if URL contains 'documentation', returns documentation.html to user; otherwise index.html 
     if (q.pathname.includes('documentation')) {
-        filePath = (_dirname + '/documentation.html');
+        filePath = (__dirname + '/documentation.html');
     } else {
         filePath = 'index.html';
     }
