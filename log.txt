@@ -10,3 +10,18 @@ Timestamp: Wed Sep 22 2021 19:27:28 GMT+0200 (Mitteleuropäische Sommerzeit)
 URL: /favicon.ico
 Timestamp: Wed Sep 22 2021 19:27:28 GMT+0200 (Mitteleuropäische Sommerzeit)
 
+URL: /
+Timestamp: Wed Sep 22 2021 19:33:41 GMT+0200 (Mitteleuropäische Sommerzeit)
+
+URL: /favicon.ico
+Timestamp: Wed Sep 22 2021 19:33:42 GMT+0200 (Mitteleuropäische Sommerzeit)
+
+URL: /documentation
+Timestamp: Wed Sep 22 2021 19:35:52 GMT+0200 (Mitteleuropäische Sommerzeit)
+
+URL: /docu
+Timestamp: Wed Sep 22 2021 19:35:55 GMT+0200 (Mitteleuropäische Sommerzeit)
+
+URL: /documentation
+Timestamp: Wed Sep 22 2021 19:35:58 GMT+0200 (Mitteleuropäische Sommerzeit)
+
