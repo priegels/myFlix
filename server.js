@@ -1,3 +1,4 @@
+//import modules
 const http = require('http'),
     fs = require('fs'),
     url = require('url');
@@ -7,6 +8,7 @@ http.createServer((request, response) => {
         q = url.parse(addr, true),
         filePath = '';
 
+    //logs request URL and timestamp to log.txt
     fs.appendFile('log.txt', 'URL: ' + addr + '\nTimestamp: ' + new Date() + '\n\n', (err) => {
         if (err) {
             console.log(err);
@@ -15,6 +17,7 @@ http.createServer((request, response) => {
         }
     });
 
+    //if URL contains 'documentation', returns documentation.html to user; otherwise index.html 
     if (q.pathname.includes('documentation')) {
         filePath = (_dirname + '/documentation.html');
     } else {
@@ -31,4 +34,5 @@ http.createServer((request, response) => {
         response.end();
     });
 }).listen(8080);
+
 console.log('My test server is running Port 8080.');
