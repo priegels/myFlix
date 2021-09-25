@@ -1,9 +1,13 @@
 const express = require('express'),
-app = express();
+morgan = require('morgan');
 
-//express.static to server "documentation.html" from the public folder
+const app = express();
+
+/*app.use functions express.static to serve "documentation.html" from the public folder
+and invoke middleware function */
 
 app.use(express.static('public'));
+app.use(morgan('common'));
 
 //list of Movies to be displayed 
 
