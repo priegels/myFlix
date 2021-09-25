@@ -1,6 +1,10 @@
 const express = require('express'),
 app = express();
 
+//express.static to server "documentation.html" from the public folder
+
+app.use(express.static('public'));
+
 //list of Movies to be displayed 
 
 let topMovies = [
@@ -94,10 +98,6 @@ let topMovies = [
   }
 ];
 
-//express.static to server "documentation.html" from the public folder
-
-app.use(express.static('public'));
-
 //GET requests
 
 app.get('/', (req, res) => {
@@ -107,8 +107,10 @@ app.get('/', (req, res) => {
 });
 
 app.get('/movies', (req, res) => {
-  let res.json(topMovies);
+  res.json(topMovies);
 });
+
+// listen for requests
 
 app.listen(8080, () => {
   console.log('Your app is listening on port 8080.');
