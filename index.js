@@ -1,5 +1,7 @@
 const express = require('express'),
 morgan = require('morgan');
+const { send } = require('process');
+const { Z_STREAM_ERROR } = require('zlib');
 
 const app = express();
 
@@ -8,6 +10,18 @@ and invoke middleware function */
 
 app.use(express.static('public'));
 app.use(morgan('common'));
+
+//list of Users to be displayed
+
+let users = [
+  {
+    id: '1',
+    name: 'user1',
+    username: 'user1',
+    password: '1resu',
+    email: 'user1@protonmail.com'
+  }
+]
 
 //list of Movies to be displayed 
 
@@ -120,14 +134,66 @@ app.get('/', (req, res) => {
   res.send(responseText);
 });
 
+//GET list of movies
+
 app.get('/movies', (req, res) => {
   res.json(topMovies);
 });
+
+//GET Movie information by title
 
 app.get('/movies/:title', (req, res) => {
   res.json(topMovies.find((movie) =>
     {return movie.title === req.params.title }));
 });
+
+//GET Genre information by name
+
+app.get('movies/:genre', (req, res) => {
+  res.json(topMovies.find(movie) =>
+    {return movie.genre === req.params.genre }));
+});
+
+//GET Director information by name
+
+app.get('movies/:director', (req, res) => {
+  res.json(topMovies.find(movie) =>
+    {return movie.director === req.params.director }));
+});
+
+//PUT Requests
+
+//app.put('/users/:name/:id/:username', (req, res) => {
+  //No idea what to put here
+
+//POST Requests
+
+//Add a user
+
+app.post('/users', (req, res) => {
+  let newUser = req.body;
+
+  if (!newUser.name) {
+    const message = 'Missing name in request body';
+    res.status(400)send(message);
+  } else {
+    newUser.id = uuid.v4();
+    users.push(newUser);
+    res.status(201).send(newUser);
+  }
+});
+
+//Add a movie to the users' list of favorites
+//no idea how to
+
+//DELETE Requests
+
+// Delete a movie from the users' list of favorites
+
+app.delete('/users/:name/:id/movies/:title')
+  let user = users.find((user) => { return user.id === req.params.id });
+
+//no idea how to 
 
 //error handling middleware
 
