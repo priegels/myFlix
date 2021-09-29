@@ -13,6 +13,7 @@ app.use(morgan('common'));
 
 let topMovies = [
   {
+    id: '1',
     title: 'Oldboy',
     director: 'Park Chan-Wook',
     genre: [
@@ -22,8 +23,9 @@ let topMovies = [
     release_date: '2003'
   },
   {
+    id: '2',
     title: 'Parasite',
-    director: 'Joon-Ho Bong',
+    director: 'Bong Joon-ho',
     genre: [
       'Drama', 
       'Comedy', 
@@ -32,6 +34,7 @@ let topMovies = [
     release_date: '2019'
   },
   {
+    id: '3',
     title: 'The Handmaiden',
     director: 'Park Chan-Wook',
     genre: [
@@ -41,6 +44,7 @@ let topMovies = [
     release_date: '2016'
   },
   {
+    id: '4',
     title: 'I Saw the Devil',
     director: 'Kim Jee-woon',
     genre: [
@@ -50,12 +54,14 @@ let topMovies = [
     release_date: '2010'
   },
   {
+    id: '5',
     title: 'Mother',
     director: 'Bong Joon-ho',
     genre: 'Mystery',
     release_date: '2009'
   },
   {
+    id: '6',
     title: 'Joint Security Area',
     director: 'Park Chan-Wook',
     genre: [
@@ -65,6 +71,7 @@ let topMovies = [
     release_date: '2010'
   },
   {
+    id: '7',
     title: 'A Bittersweet Life',
     director: 'Kim Jee-woon',
     genre: [
@@ -74,6 +81,7 @@ let topMovies = [
     release_date: '2005'
   },
   {
+    id: '8',
     title: 'Memories of Murder',
     director: 'Bong Joon-ho',
     genre: [
@@ -83,6 +91,7 @@ let topMovies = [
     release_date: '2003'
   },
   {
+   id: '9',
    title: 'The Chaser',
    director: 'Na Hong-jin',
    genre: [
@@ -92,6 +101,7 @@ let topMovies = [
    release_date: '2008' 
   },
   {
+    id: '10',
     title: 'A Tale of Two Sisters',
     director: 'Kim Jee-woon',
     genre: [
@@ -112,6 +122,11 @@ app.get('/', (req, res) => {
 
 app.get('/movies', (req, res) => {
   res.json(topMovies);
+});
+
+app.get('/movies/:title', (req, res) => {
+  res.json(topMovies.find((movie) =>
+    {return movie.title === req.params.title }));
 });
 
 //error handling middleware
