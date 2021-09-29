@@ -98,6 +98,7 @@
             <td>A JSON object holding data about the user to add, structured like: <br>
                 <div style="color: #00a1ff;">{<br>
                     &nbsp;Name: "user1", <br>
+                    &nbsp;Username: "user1", <br>
                     &nbsp;Password: "1resu" <br>
                     &nbsp;Mail: "user1@protonmail.com"<br>
                 }
@@ -106,6 +107,7 @@
                 <div style="color: #00a1ff;">{<br>
                     &nbsp;id: 1, <br>
                     &nbsp;Name: "user1", <br>
+                    &nbsp;Username: "user1", <br>
                     &nbsp;Password: "1resu" <br>
                     &nbsp;Mail: "user1@protonmail.com"<br> 
                 }
@@ -113,22 +115,22 @@
         </tr>
         <tr>
             <td>Update the username of a user</td>
-            <td>/users/[Name]</td>
+            <td>/users/[id]/[Username]</td>
             <td>PUT</td>
             <td>None</td>
             <td>A text message indicating whether the username was updated</td>
         </tr>
         <tr>
             <td>Allow a user to add a movie to their list of favorites</td>
-            <td>/users/[Name]/[MovieID]</td>
+            <td>/users/[Name]/[id]/movies/[Title]</td>
             <td>POST</td>
             <td>None</td>
             <td>A text message indicating whether the movie has been added</td>
         </tr>
         <tr>
             <td>Allow a user to remove a movie from their list of favorites</td>
-            <td>/users/[Name]/[MovieID]</td>
-            <td>POST</td>
+            <td>/users/[Name]/[id]/movies/[Title]</td>
+            <td>DELETE</td>
             <td>None</td>
             <td>A text message indicating whether the movie has been removed</td>
         </tr>
