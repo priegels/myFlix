@@ -150,14 +150,14 @@ app.get('/movies/:title', (req, res) => {
 //GET Genre information by name
 
 app.get('movies/:genre', (req, res) => {
-  res.json(topMovies.find(movie) =>
+  res.json(topMovies.find((movie) =>
     {return movie.genre === req.params.genre }));
 });
 
 //GET Director information by name
 
 app.get('movies/:director', (req, res) => {
-  res.json(topMovies.find(movie) =>
+  res.json(topMovies.find((movie) =>
     {return movie.director === req.params.director }));
 });
 
@@ -175,7 +175,7 @@ app.post('/users', (req, res) => {
 
   if (!newUser.name) {
     const message = 'Missing name in request body';
-    res.status(400)send(message);
+    res.status(400).send(message);
   } else {
     newUser.id = uuid.v4();
     users.push(newUser);
