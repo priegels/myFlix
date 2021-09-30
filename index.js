@@ -1,13 +1,14 @@
 const express = require('express'),
-morgan = require('morgan');
-const { send } = require('process');
-const { Z_STREAM_ERROR } = require('zlib');
+morgan = require('morgan'),
+uuid = require('uuid');
 
 const app = express();
 
 /*app.use functions express.static to serve "documentation.html" from the public folder
 and invoke middleware function */
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.use(express.static('public'));
 app.use(morgan('common'));
 
@@ -23,106 +24,106 @@ let users = [
   }
 ]
 
-//list of Movies to be displayed 
+//list of Movies to be displayed
 
 let topMovies = [
   {
-    id: '1',
-    title: 'Oldboy',
-    director: 'Park Chan-Wook',
-    genre: [
-      'Thriller', 
+    'id': '1',
+    'title': 'Oldboy',
+    'director': 'Park Chan-Wook',
+    'genre': [
+      'Thriller',
       'Drama'
     ],
-    release_date: '2003'
+    'release_date': '2003'
   },
   {
-    id: '2',
-    title: 'Parasite',
-    director: 'Bong Joon-ho',
-    genre: [
-      'Drama', 
-      'Comedy', 
+    'id': '2',
+    'title': 'Parasite',
+    'director': 'Bong Joon-ho',
+    'genre': [
+      'Drama',
+      'Comedy',
       'Thriller'
     ],
-    release_date: '2019'
+    'release_date': '2019'
   },
   {
-    id: '3',
-    title: 'The Handmaiden',
-    director: 'Park Chan-Wook',
-    genre: [
-      'Romance', 
+    'id': '3',
+    'title': 'The Handmaiden',
+    'director': 'Park Chan-Wook',
+    'genre': [
+      'Romance',
       'Drama'
     ],
-    release_date: '2016'
+    'release_date': '2016'
   },
   {
-    id: '4',
-    title: 'I Saw the Devil',
-    director: 'Kim Jee-woon',
-    genre: [
-      'Thriller', 
+    'id': '4',
+    'title': 'I Saw the Devil',
+    'director': 'Kim Jee-woon',
+    'genre': [
+      'Thriller',
       'Action'
     ],
-    release_date: '2010'
+    'release_date': '2010'
   },
   {
-    id: '5',
-    title: 'Mother',
-    director: 'Bong Joon-ho',
-    genre: 'Mystery',
-    release_date: '2009'
+    'id': '5',
+    'title': 'Mother',
+    'director': 'Bong Joon-ho',
+    'genre': 'Mystery',
+    'release_date': '2009'
   },
   {
-    id: '6',
-    title: 'Joint Security Area',
-    director: 'Park Chan-Wook',
-    genre: [
-      'Mystery', 
+    'id': '6',
+    'title': 'Joint Security Area',
+    'director': 'Park Chan-Wook',
+    'genre': [
+      'Mystery',
       'Drama'
     ],
-    release_date: '2010'
+    'release_date': '2010'
   },
   {
-    id: '7',
-    title: 'A Bittersweet Life',
-    director: 'Kim Jee-woon',
-    genre: [
-      'Action', 
+    'id': '7',
+    'title': 'A Bittersweet Life',
+    'director': 'Kim Jee-woon',
+    'genre': [
+      'Action',
       'Drama'
     ],
-    release_date: '2005'
+    'release_date': '2005'
   },
   {
-    id: '8',
-    title: 'Memories of Murder',
-    director: 'Bong Joon-ho',
-    genre: [
-      'Crime', 
+    'id': '8',
+    'title': 'Memories of Murder',
+    'director': 'Bong Joon-ho',
+    'genre': [
+      'Crime',
       'Thriller'
     ],
-    release_date: '2003'
+    'release_date': '2003'
   },
   {
-   id: '9',
-   title: 'The Chaser',
-   director: 'Na Hong-jin',
-   genre: [
-     'Thriller', 
+   'id': '9',
+   'title': 'The Chaser',
+   'director': 'Na Hong-jin',
+   'genre': [
+     'Thriller',
      'Action'
    ],
-   release_date: '2008' 
+   'release_date': '2008'
   },
   {
-    id: '10',
-    title: 'A Tale of Two Sisters',
-    director: 'Kim Jee-woon',
-    genre: [
-      'Horror', 
+    'id': '10',
+    'title': 'A Tale of Two Sisters',
+    'director': 'Kim Jee-woon',
+    'genre': [
+      'Horror',
       'Thriller'
     ],
-    release_date: '2003'
+    'release_date': '2003'
   }
 ];
 
@@ -149,16 +150,20 @@ app.get('/movies/:title', (req, res) => {
 
 //GET Genre information by name
 
-app.get('movies/:genre', (req, res) => {
+app.get('/movies/:genre', (req, res) => {
   res.json(topMovies.find((movie) =>
     {return movie.genre === req.params.genre }));
 });
 
 //GET Director information by name
 
-app.get('movies/:director', (req, res) => {
+app.get('/movies/:director', (req, res) => {
   res.json(topMovies.find((movie) =>
     {return movie.director === req.params.director }));
+});
+
+app.get('/users', (req, res) => {
+  res.json(users);
 });
 
 //PUT Requests
@@ -184,16 +189,49 @@ app.post('/users', (req, res) => {
 });
 
 //Add a movie to the users' list of favorites
-//no idea how to
+
+app.post('/movies', (req, res) => {
+  let newMovie = req.body;
+
+  if (!newMovie.title) {
+    const message = 'Missing title in request body';
+    res.status(400).send(message);
+  } else {
+    newMovie.id = uuid.v4();
+    topMovies.push(newMovie);
+    res.status(201).send(newMovie);
+  }
+});
 
 //DELETE Requests
 
 // Delete a movie from the users' list of favorites
+app.delete('/movies/:title', (req, res) => {
+  let movie = topMovies.find((movie) => {
+  return movie.title === req.params.title
+  });
 
-app.delete('/users/:name/:id/movies/:title')
-  let user = users.find((user) => { return user.id === req.params.id });
+  if (movie) {
+    topMovies = topMovies.filter((obj) => { return obj.title !== req.params.title });
+    res.status(201).send('Movie with the title of ' + req.params.title + ' was deleted.');
+  } else {
+    res.status(404).send('Movie with the title $(req.params.title) was not found.');
+  }
+});
 
-//no idea how to 
+//delete a user from the user list (deregistering)
+app.delete('/users/:id', (req, res) => {
+  let user = users.find((user) => {
+    return user.id === req.params.id
+  });
+
+  if (user) {
+    users = users.filter((obj) => { return obj.id !== req.params.id });
+    res.status(201).send('User with the ID of ' + req.params.id + ' was deleted.');
+  } else {
+    res.status(404).send('User with the ID $(req.params.id) was not found.');
+  }
+});
 
 //error handling middleware
 
