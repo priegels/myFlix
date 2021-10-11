@@ -35,7 +35,7 @@ app.use(morgan('common'));
 app.get('/users', (req, res) => {
   Users.find() 
     .then((users) => {
-      res.status(201).json(users);
+      res.status(200).json(users);
     })
     .catch((err) => {
       console.error(err);
@@ -59,7 +59,7 @@ app.get('/users/:Username', (req, res) => {
 app.get('/movies', (req, res) => {
   Movies.find()
     .then((movies) => {
-      res.status(201).json(movies);
+      res.status(200).json(movies);
     })
     .catch((err) => {
       console.error(err);
@@ -83,7 +83,7 @@ app.get('/movies/:Title', (req, res) => {
 app.get('/directors', (req, res) => {
   Directors.find()
   .then((directors) => {
-    res.status(201).json(directors);
+    res.status(200).json(directors);
   })
   .catch((err) => {
     console.error(err);
@@ -107,7 +107,7 @@ app.get('/directors/:Name', (req, res) => {
 app.get('/genres', (req, res) => {
   Genres.find()
   .then((genres) => {
-    res.status(201).json(genres);
+    res.status(200).json(genres);
   })
   .catch((err) => {
     console.error(err);
@@ -173,7 +173,7 @@ app.post('/users', (req, res) => {
   Users.findOne({ Username: req.body.Username })
   .then((user) => {
     if (user) {
-      return res.status(400).send(req.body.Username + 'already exists');
+      return res.status(409).send(req.body.Username + 'already exists');
     } else {
       Users
       .create({
@@ -257,6 +257,7 @@ app.use((err, req, res, next) => {
 
 // listen for requests
 
-app.listen(8080, () => {
-  console.log('Your app is listening on port 8080.');
+const port = process.env.PORT || 8080;
+app.listen(port, () => {
+  console.log('Your app is listening on port ${port}');
 });
