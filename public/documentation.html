@@ -50,44 +50,53 @@
                 description, genre, director, and image URL. Example <br>
                 <div style="color: #00a1ff;">{<br>
                     &nbsp;id: 1, <br>
-                    &nbsp;title: "Oldboy", <br>
-                    &nbsp;description: "Thriller about revenge.", <br>
-                    &nbsp;genre: [ <br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Thriller', <br> 
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Drama' <br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;], <br>
-                     &nbsp;director: "Park Chan-Wook", <br>
-                     &nbsp;image URL: https://www.urlofmovie.com <br>                    
+                    &nbsp;Title: "Oldboy", <br>
+                    &nbsp;Description: "Thriller about revenge.", <br>
+                    &nbsp;Genre: [ <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "ObjectId", <br> 
+                     &nbsp;Director: "Object ID", <br>
+                     &nbsp;ImagePath: "https://www.urlofmovie.com" <br>
+                     &nbsp;Featured: true<br>                    
                     } 
                 </div>
             </td>
         </tr>
         <tr>
-            <td>Get data about a genre by name/title</td>
-            <td>/movies/[Genre]</td>
+            <td>Get list of genres</td>
+            <td>/genres</td>
+            <td>GET</td>
+            <td>None</td>
+            <td>A JSON object holding data about all the genres</td>
+        </tr>
+        <tr>
+            <td>Get data about a genre by name</td>
+            <td>/genres/[Name]</td>
             <td>GET</td>
             <td>None</td>
             <td>A JSON object holding data about the genre, structured like: <br>
                 <div style="color: #00a1ff;">{<br>
                     &nbsp;Genre: "Thriller", <br>
-                     &nbsp;Movies: [ <br>
-                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Oldboy', <br> 
-                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Parasite' <br>
-                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;], <br>  
+                     &nbsp;Description: "A thriller film is..."<br>  
                     } 
                 </div>
             </td>
         </tr>
         <tr>
-            <td>Get data about a director (bio, birth year, death year) by name</td>
-            <td>/movies/[Director]</td>
+            <td>Get list of directors</td>
+            <td>/directors</td>
+            <td>GET</td>
+            <td>None</td>
+            <td>A JSON object holding data about all the directors</td>
+        </tr>
+        <tr>
+            <td>Get data about a director by name</td>
+            <td>/directors/[Name]</td>
             <td>GET</td>
             <td>None</td>
             <td>A JSON object holding data about the director, structured like: <br>
                 <div style="color: #00a1ff;">{<br>
-                    &nbsp;Name: "Park Chan-Wook", <br>
-                    &nbsp;Birth year: 1963 <br>
-                    &nbsp;Death year: "Still alive"<br>
+                    &nbsp;Name: "Park Chan-wook", <br>
+                    &nbsp;Bio: "Park Chan-wook (born ...)"<br>
                 }
             </td>
         </tr>
@@ -97,46 +106,46 @@
             <td>POST</td>
             <td>A JSON object holding data about the user to add, structured like: <br>
                 <div style="color: #00a1ff;">{<br>
-                    &nbsp;Name: "user1", <br>
                     &nbsp;Username: "user1", <br>
                     &nbsp;Password: "1resu" <br>
-                    &nbsp;Mail: "user1@protonmail.com"<br>
+                    &nbsp;Email: "user1@protonmail.com"<br>
+                    &nbsp;Birthday: "1991-01-01"<br>
                 }
             </td>
             <td>A JSON object holding data about the user to add, structured like: <br>
                 <div style="color: #00a1ff;">{<br>
                     &nbsp;id: 1, <br>
-                    &nbsp;Name: "user1", <br>
                     &nbsp;Username: "user1", <br>
                     &nbsp;Password: "1resu" <br>
                     &nbsp;Mail: "user1@protonmail.com"<br> 
+                    &nbsp;Birthday: "1991-01-01"<br>
                 }
             </td>
         </tr>
         <tr>
-            <td>Update the username of a user</td>
-            <td>/users/[id]/[Username]</td>
+            <td>Update the users' info by username</td>
+            <td>/users/[Username]</td>
             <td>PUT</td>
             <td>None</td>
             <td>A text message indicating whether the username was updated</td>
         </tr>
         <tr>
             <td>Allow a user to add a movie to their list of favorites</td>
-            <td>/users/[Name]/[id]/movies/[Title]</td>
+            <td>/users/Username/movies/[MovieID]</td>
             <td>POST</td>
             <td>None</td>
             <td>A text message indicating whether the movie has been added</td>
         </tr>
         <tr>
             <td>Allow a user to remove a movie from their list of favorites</td>
-            <td>/users/[Name]/[id]/movies/[Title]</td>
+            <td>/users/[Username]/movies/[MovieID]</td>
             <td>DELETE</td>
             <td>None</td>
             <td>A text message indicating whether the movie has been removed</td>
         </tr>
         <tr>
             <td>Allow a user to deregister</td>
-            <td>/users/[Name]</td>
+            <td>/users/[Username]</td>
             <td>DELETE</td>
             <td>NONE</td>
             <td>A text message indicating whether the user info has been deleted</td>
