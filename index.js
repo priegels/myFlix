@@ -1,170 +1,131 @@
+//importing required modules
 const express = require('express'),
 morgan = require('morgan'),
-uuid = require('uuid');
+uuid = require('uuid'),
+bodyParser = require('body-parser');
+
+//importing models from models.js
+const mongoose = require('mongoose'),
+Models = require('./models.js');
+
+const Movies = Models.Movie;
+const Users = Models.User;
+const Directors = Models.Director;
+const Genres = Models.Genre;
+
+//connecting database 
+mongoose.connect('mongodb://localhost:27017/K-Flix', { useNewUrlParser: true, useUnifiedTopology: true });
 
 const app = express();
 
 /*app.use functions express.static to serve "documentation.html" from the public folder
 and invoke middleware function */
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static('public'));
 app.use(morgan('common'));
 
-//list of Users to be displayed
-
-let users = [
-  {
-    id: '1',
-    name: 'user1',
-    username: 'user1',
-    password: '1resu',
-    email: 'user1@protonmail.com'
-  }
-]
-
-//list of Movies to be displayed
-
-let topMovies = [
-  {
-    'id': '1',
-    'title': 'Oldboy',
-    'director': 'Park Chan-Wook',
-    'genre': [
-      'Thriller',
-      'Drama'
-    ],
-    'release_date': '2003'
-  },
-  {
-    'id': '2',
-    'title': 'Parasite',
-    'director': 'Bong Joon-ho',
-    'genre': [
-      'Drama',
-      'Comedy',
-      'Thriller'
-    ],
-    'release_date': '2019'
-  },
-  {
-    'id': '3',
-    'title': 'The Handmaiden',
-    'director': 'Park Chan-Wook',
-    'genre': [
-      'Romance',
-      'Drama'
-    ],
-    'release_date': '2016'
-  },
-  {
-    'id': '4',
-    'title': 'I Saw the Devil',
-    'director': 'Kim Jee-woon',
-    'genre': [
-      'Thriller',
-      'Action'
-    ],
-    'release_date': '2010'
-  },
-  {
-    'id': '5',
-    'title': 'Mother',
-    'director': 'Bong Joon-ho',
-    'genre': 'Mystery',
-    'release_date': '2009'
-  },
-  {
-    'id': '6',
-    'title': 'Joint Security Area',
-    'director': 'Park Chan-Wook',
-    'genre': [
-      'Mystery',
-      'Drama'
-    ],
-    'release_date': '2010'
-  },
-  {
-    'id': '7',
-    'title': 'A Bittersweet Life',
-    'director': 'Kim Jee-woon',
-    'genre': [
-      'Action',
-      'Drama'
-    ],
-    'release_date': '2005'
-  },
-  {
-    'id': '8',
-    'title': 'Memories of Murder',
-    'director': 'Bong Joon-ho',
-    'genre': [
-      'Crime',
-      'Thriller'
-    ],
-    'release_date': '2003'
-  },
-  {
-   'id': '9',
-   'title': 'The Chaser',
-   'director': 'Na Hong-jin',
-   'genre': [
-     'Thriller',
-     'Action'
-   ],
-   'release_date': '2008'
-  },
-  {
-    'id': '10',
-    'title': 'A Tale of Two Sisters',
-    'director': 'Kim Jee-woon',
-    'genre': [
-      'Horror',
-      'Thriller'
-    ],
-    'release_date': '2003'
-  }
-];
-
 //GET requests
 
-app.get('/', (req, res) => {
-  let responseText = 'This will be a movie database app once I figure out what I\'m doing.';
-  responseText += '<small>Requested at: ' + req.requestTime + '</small>';
-  res.send(responseText);
-});
-
-//GET list of movies
-
-app.get('/movies', (req, res) => {
-  res.json(topMovies);
-});
-
-//GET Movie information by title
-
-app.get('/movies/:title', (req, res) => {
-  res.json(topMovies.find((movie) =>
-    {return movie.title === req.params.title }));
-});
-
-//GET Genre information by name
-
-app.get('/movies/:genre', (req, res) => {
-  res.json(topMovies.find((movie) =>
-    {return movie.genre === req.params.genre }));
-});
-
-//GET Director information by name
-
-app.get('/movies/:director', (req, res) => {
-  res.json(topMovies.find((movie) =>
-    {return movie.director === req.params.director }));
-});
-
+//Get all users
 app.get('/users', (req, res) => {
-  res.json(users);
+  Users.find() 
+    .then((users) => {
+      res.status(201).json(users);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
 });
+
+//Get a user by username
+app.get('/users/:Username', (req, res) => {
+  Users.findOne({ Username: req.params.Username })
+    .then((user) => {
+      res.json(user);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
+});
+
+//Get all movies
+app.get('/movies', (req, res) => {
+  Movies.find()
+    .then((movies) => {
+      res.status(201).json(movies);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
+});
+
+//Get movie by title
+app.get('/movies/:Title', (req, res) => {
+  Movies.findOne({ Title: req.params.Title })
+  .then((movie) => {
+    res.json(movie);
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).send('Error: ' + err);
+  });
+});
+
+//Get all directors
+app.get('/directors', (req, res) => {
+  Directors.find()
+  .then((directors) => {
+    res.status(201).json(directors);
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).send('Error: ' + err);
+  });
+});
+
+//Get director by name
+app.get('/directors/:Name', (req, res) => {
+  Directors.findOne({ Name: req.params.Name })
+  .then((director) => {
+    res.json(director);
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).send('Error: ' + err);
+  });
+});
+
+//Get all genres
+app.get('/genres', (req, res) => {
+  Genres.find()
+  .then((genres) => {
+    res.status(201).json(genres);
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).send('Error: ' + err);
+  });
+});
+
+//Get Genre by name
+app.get('/genres/:Name', (req, res) => {
+  Genres.findOne({ Name: req.params.Name })
+  .then((genre) => {
+    res.json(genre);
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).send('Error: ' + err);
+  });
+});
+
 
 //PUT Requests
 
