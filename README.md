@@ -10,15 +10,6 @@ To build the server-side component of a “movies” web application. The web ap
 - Express
 - MongoDB
 
-## API Endpoints
-
-| Tables        | Are           | Cool  |
-| ------------- |:-------------:| -----:|
-| col 3 is      | right-aligned | $1600 |
-| col 2 is      | centered      |   $12 |
-| zebra stripes | are neat      |    $1 |
-
-
 ### Roadmap/Feature Requirements
 - Return a list of ALL movies to the user
 - Return data (description, genre, director, image URL, whether it’s featured or not) about a
