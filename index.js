@@ -3,6 +3,7 @@ const express = require('express'),
 morgan = require('morgan'),
 uuid = require('uuid'),
 bodyParser = require('body-parser');
+const { isBuffer } = require('lodash');
 
 //importing models from models.js
 const mongoose = require('mongoose'),
@@ -129,8 +130,33 @@ app.get('/genres/:Name', (req, res) => {
 
 //PUT Requests
 
-//app.put('/users/:name/:id/:username', (req, res) => {
-  //No idea what to put here
+//update a user's info, by username
+/* JSON format
+{
+  Username: String, (required)
+  Password: String, (required)
+  Email: String, (required)
+  Birthday: Date
+}*/
+app.put('/users/:Username', (req, res) => {
+  Users.findOneAndUpdate({ Username: req.params.Username }, {$set: 
+    {
+      Username: req.body.Username,
+      Password: req.body.Password,
+      Email: req.body.Email,
+      Birthday: req.body.Birthday
+    }
+  },
+  { new: true },
+  (err, updatedUser) => {
+    if(err) {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    } else {
+      res.json(updatedUser);
+    }
+  });
+});
 
 //POST Requests
 
@@ -190,32 +216,37 @@ app.post('/users/:Username/movies/:MovieID', (req, res) => {
 //DELETE Requests
 
 // Delete a movie from the users' list of favorites
-app.delete('/movies/:title', (req, res) => {
-  let movie = topMovies.find((movie) => {
-  return movie.title === req.params.title
+app.delete('/users/:Username/movies/:MovieID', (req, res) => {
+  Users.findOneAndUpdate({ Username: req.params.Username }, {
+    $pull: { FavoriteMovies: req.params.MovieID }
+  },
+  {new: true }, // This line makes sure that the updated document is returned
+  (err, updatedUser) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    } else {
+      res.json(updatedUser);
+    }
   });
-
-  if (movie) {
-    topMovies = topMovies.filter((obj) => { return obj.title !== req.params.title });
-    res.status(201).send('Movie with the title of ' + req.params.title + ' was deleted.');
-  } else {
-    res.status(404).send('Movie with the title $(req.params.title) was not found.');
-  }
 });
 
 //delete a user from the user list (deregistering)
-app.delete('/users/:id', (req, res) => {
-  let user = users.find((user) => {
-    return user.id === req.params.id
+app.delete('/users/:Username', (req, res) => {
+  Users.findOneAndRemove({ Username: req.params.Username })
+  .then((user) => {
+    if (!user) {
+      res.status(400).send(req.params.Username + ' was not found');
+    } else {
+      res.status(200).send(req.params.Username + ' was deleted.');
+    }
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).send('Error: ' + err);
   });
-
-  if (user) {
-    users = users.filter((obj) => { return obj.id !== req.params.id });
-    res.status(201).send('User with the ID of ' + req.params.id + ' was deleted.');
-  } else {
-    res.status(404).send('User with the ID $(req.params.id) was not found.');
-  }
 });
+
 
 //error handling middleware
 
