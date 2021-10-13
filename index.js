@@ -22,13 +22,16 @@ const app = express();
 /*app.use functions express.static to serve "documentation.html" from the public folder
 and invoke middleware function */
 
+//activating body-parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+//calling passport and authorization
 let auth = require('./auth')(app);
 const passport = require('passport');
 require('./passport');
 
+//calling express
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static('public'));
@@ -61,7 +64,7 @@ app.get('/users/:Username', (req, res) => {
 });
 
 //Get all movies
-app.get('/movies', (req, res) => {
+app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
   Movies.find()
     .then((movies) => {
       res.status(200).json(movies);
