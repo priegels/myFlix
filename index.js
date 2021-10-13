@@ -14,7 +14,7 @@ const Users = Models.User;
 const Directors = Models.Director;
 const Genres = Models.Genre;
 
-//connecting database 
+//connecting database
 mongoose.connect('mongodb://localhost:27017/K-Flix', { useNewUrlParser: true, useUnifiedTopology: true });
 
 const app = express();
@@ -24,6 +24,11 @@ and invoke middleware function */
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+let auth = require('./auth')(app);
+const passport = require('passport');
+require('./passport');
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static('public'));
@@ -33,7 +38,7 @@ app.use(morgan('common'));
 
 //Get all users
 app.get('/users', (req, res) => {
-  Users.find() 
+  Users.find()
     .then((users) => {
       res.status(200).json(users);
     })
@@ -139,7 +144,7 @@ app.get('/genres/:Name', (req, res) => {
   Birthday: Date
 }*/
 app.put('/users/:Username', (req, res) => {
-  Users.findOneAndUpdate({ Username: req.params.Username }, {$set: 
+  Users.findOneAndUpdate({ Username: req.params.Username }, {$set:
     {
       Username: req.body.Username,
       Password: req.body.Password,
