@@ -5,6 +5,7 @@ uuid = require('uuid'),
 bodyParser = require('body-parser');
 const { isBuffer } = require('lodash');
 const bcrypt = require('bcrypt');
+const { check, validationResults } = require('express-validator');
 
 //importing models from models.js
 const mongoose = require('mongoose'),
@@ -151,11 +152,23 @@ app.get('/genres/:Name', passport.authenticate('jwt', { session: false }), (req,
   Email: String, (required)
   Birthday: Date
 }*/
-app.put('/users/:Username', passport.authenticate('jwt', { session: false }), (req, res) => {
+app.put('/users/:Username',
+[
+  check('Username', 'Username is required').isLength({min: 5}),
+  check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
+  check('Password', 'Password is required').not().isEmpty(),
+  check('Email', 'Email does not appear to be valid').isEmail()
+], passport.authenticate('jwt', { session: false }), (req, res) => {
+  // check validation object for errors
+  let errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
   Users.findOneAndUpdate({ Username: req.params.Username }, {$set:
     {
       Username: req.body.Username,
-      Password: req.body.Password,
+      Password: hashedPassword,
       Email: req.body.Email,
       Birthday: req.body.Birthday
     }
@@ -182,7 +195,20 @@ app.put('/users/:Username', passport.authenticate('jwt', { session: false }), (r
   Email: String,
   Birthday: Date
 }*/
-app.post('/users', passport.authenticate('jwt', { session: false }), (req, res) => {
+app.post('/users',
+  [
+    check('Username', 'Username is required').isLength({min: 5}),
+    check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
+    check('Password', 'Password is required').not().isEmpty(),
+    check('Email', 'Email does not appear to be valid').isEmail()
+  ], passport.authenticate('jwt', { session: false }), (req, res) => {
+    // check validation object for errors
+    let errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
+
   let hashedPassword = Users.hashPassword(req.body.Password);
   Users.findOne({ Username: req.body.Username })
   .then((user) => {
