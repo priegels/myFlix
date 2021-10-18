@@ -4,6 +4,7 @@ morgan = require('morgan'),
 uuid = require('uuid'),
 bodyParser = require('body-parser');
 const { isBuffer } = require('lodash');
+const bcrypt = require('bcrypt');
 
 //importing models from models.js
 const mongoose = require('mongoose'),
@@ -25,6 +26,10 @@ and invoke middleware function */
 //activating body-parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// enabling CORS
+const cors = require('cors');
+app.use(cors());
 
 //calling passport and authorization
 let auth = require('./auth')(app);
@@ -267,5 +272,5 @@ app.use((err, req, res, next) => {
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
-  console.log('Your app is listening on port ${port}');
+  console.log(`Your app is listening on port ${port}`);
 });
