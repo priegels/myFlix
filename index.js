@@ -3,11 +3,11 @@ const express = require('express'),
 morgan = require('morgan'),
 uuid = require('uuid'),
 bodyParser = require('body-parser');
+const dotenv = require("dotenv");
 const { isBuffer } = require('lodash');
 const bcrypt = require('bcrypt');
 const { check, validationResult } = require('express-validator');
 
-const dotenv = require("dotenv");
 dotenv.config();
 
 //importing models from models.js
@@ -173,7 +173,7 @@ app.put('/users/:Username',
   Users.findOneAndUpdate({ Username: req.params.Username }, {$set:
     {
       Username: req.body.Username,
-      Password: hashedPassword,
+      Password: req.body.Password,
       Email: req.body.Email,
       Birthday: req.body.Birthday
     }
