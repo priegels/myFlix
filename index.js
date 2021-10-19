@@ -20,9 +20,9 @@ const Directors = Models.Director;
 const Genres = Models.Genre;
 
 //connecting database
-mongoose.connect('mongodb://localhost:27017/K-Flix', { useNewUrlParser: true, useUnifiedTopology: true });
+//mongoose.connect('mongodb://localhost:27017/K-Flix', { useNewUrlParser: true, useUnifiedTopology: true });
 
-//mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const app = express();
 
@@ -201,12 +201,12 @@ app.put('/users/:Username',
   Birthday: Date
 }*/
 app.post('/users',
-  /*[
+  [
     check('Username', 'Username is required').isLength({min: 5}),
     check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
     check('Password', 'Password is required').not().isEmpty(),
     check('Email', 'Email does not appear to be valid').isEmail()
-  ],*/ (req, res) => {
+  ], (req, res) => {
   console.log('error')
     // check validation object for errors
     let errors = validationResult(req);
