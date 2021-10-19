@@ -7,6 +7,9 @@ const { isBuffer } = require('lodash');
 const bcrypt = require('bcrypt');
 const { check, validationResults } = require('express-validator');
 
+const dotenv = require("dotenv");
+dotenv.config();
+
 //importing models from models.js
 const mongoose = require('mongoose'),
 Models = require('./models.js');
