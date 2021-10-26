@@ -20,9 +20,9 @@ const Directors = Models.Director;
 const Genres = Models.Genre;
 
 //connecting database
-//mongoose.connect('mongodb://localhost:27017/K-Flix', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb://localhost:27017/K-Flix', { useNewUrlParser: true, useUnifiedTopology: true });
 
-mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+//mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const app = express();
 
@@ -163,7 +163,7 @@ app.get('/genres/:Name', passport.authenticate('jwt', { session: false }), (req,
 }*/
 app.put('/users/:Username',
 [
-  check('Username', 'Username is required').isLength({min: 5}),
+  check('Username', 'Username is required (containing at least 3 characters)').isLength({min: 3}),
   check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
   check('Password', 'Password is required').not().isEmpty(),
   check('Email', 'Email does not appear to be valid').isEmail()
@@ -173,6 +173,8 @@ app.put('/users/:Username',
 
   if (!errors.isEmpty()) {
     return res.status(422).json({ errors: errors.array() });
+  } else if (res.user.Username !== req.params.Username) {
+    res.status(403).send('Error: Cannot change other users\' info.');
   }
 
   let hashedPassword = Users.hashPassword(req.body.Password);
@@ -208,7 +210,7 @@ app.put('/users/:Username',
 }*/
 app.post('/users',
   [
-    check('Username', 'Username is required').isLength({min: 5}),
+    check('Username', 'Username is required (containing at least 3 characters)').isLength({min: 3}),
     check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
     check('Password', 'Password is required').not().isEmpty(),
     check('Email', 'Email does not appear to be valid').isEmail()
@@ -286,8 +288,16 @@ app.delete('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { se
 app.delete('/users/:Username', passport.authenticate('jwt', { session: false }), (req, res) => {
   Users.findOneAndRemove({ Username: req.params.Username })
   .then((user) => {
+    /*
     if (!user) {
       res.status(400).send(req.params.Username + ' was not found');
+    } else {
+      res.status(200).send(req.params.Username + ' was deleted.');
+    }*/
+
+    //preventing users from deleting any users but themselves
+    if (req.user.Username !== req.params.Username) {
+      res.status(403).send('Cannot delete other users.')
     } else {
       res.status(200).send(req.params.Username + ' was deleted.');
     }
