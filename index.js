@@ -173,7 +173,7 @@ app.put('/users/:Username',
 
   if (!errors.isEmpty()) {
     return res.status(422).json({ errors: errors.array() });
-  } else if (res.user.Username !== req.params.Username) {
+  } else if (req.user.Username !== req.params.Username) {
     res.status(403).send('Error: Cannot change other users\' info.');
   }
 
