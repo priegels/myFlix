@@ -146,7 +146,6 @@ app.get('/genres', passport.authenticate('jwt', { session: false }), (req, res) 
 //Get Genre by name
 app.get('/genres/:Name', passport.authenticate('jwt', { session: false }), (req, res) => {
   Genres.findOne({ Name: req.params.Name })
-  .populate('Genre')
   .then((genre) => {
     res.json(genre);
   })
