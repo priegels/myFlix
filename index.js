@@ -121,7 +121,6 @@ app.get('/directors', passport.authenticate('jwt', { session: false }), (req, re
 //Get director by name
 app.get('/directors/:Name', passport.authenticate('jwt', { session: false }), (req, res) => {
   Directors.findOne({ Name: req.params.Name })
-  .populate('Director')
   .then((director) => {
     res.json(director);
   })
