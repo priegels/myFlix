@@ -81,6 +81,8 @@ app.get('/users/:Username', passport.authenticate('jwt', { session: false }), (r
 //Get all movies
 app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
   Movies.find()
+    .populate('Director')
+    .populate('Genre')
     .then((movies) => {
       res.status(200).json(movies);
     })
@@ -93,7 +95,8 @@ app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) 
 //Get movie by title
 app.get('/movies/:Title', passport.authenticate('jwt', { session: false }), (req, res) => {
   Movies.findOne({ Title: req.params.Title })
-  .populate("Director")
+  .populate('Director')
+  .populate('Genre')
   .then((movie) => {
     res.json(movie);
   })
@@ -118,6 +121,7 @@ app.get('/directors', passport.authenticate('jwt', { session: false }), (req, re
 //Get director by name
 app.get('/directors/:Name', passport.authenticate('jwt', { session: false }), (req, res) => {
   Directors.findOne({ Name: req.params.Name })
+  .populate('Director')
   .then((director) => {
     res.json(director);
   })
@@ -142,6 +146,7 @@ app.get('/genres', passport.authenticate('jwt', { session: false }), (req, res) 
 //Get Genre by name
 app.get('/genres/:Name', passport.authenticate('jwt', { session: false }), (req, res) => {
   Genres.findOne({ Name: req.params.Name })
+  .populate('Genre')
   .then((genre) => {
     res.json(genre);
   })
