@@ -1,11 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require("bcrypt");
 
-let directorSchema = mongoose.Schema({
-    Name: {type: String, required: true},
-    Bio: {type: String, required: true}
-}); 
-
 let movieSchema = mongoose.Schema({
     Title: {type: String, required: true},
     Description: {type: String, required: true},
@@ -17,7 +12,7 @@ let movieSchema = mongoose.Schema({
         Name: String,
         Bio: String
     },*/
-    Director: {type: directorSchema, default: {}, ref: 'Director'},
+    Director: {type: mongoose.Schema.Types.ObjectId, ref: 'Director'},
     ImagePath: String,
     Featured: Boolean
 });
@@ -38,11 +33,10 @@ userSchema.methods.validatePassword = function(password) {
   return bcrypt.compareSync(password, this.Password);
 };
 
-
-
-
-
-
+let directorSchema = mongoose.Schema({
+    Name: {type: String, required: true},
+    Bio: {type: String, required: true}
+});
 
 let genreSchema = mongoose.Schema({
     Name: {type: String, required: true},
