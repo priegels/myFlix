@@ -35,7 +35,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // enabling CORS
 const cors = require('cors');
-let allowedOrigins = ['http://localhost:1234', 'https://k-flix.netlify.app'];
+let allowedOrigins = ['http://localhost:1234', 'http://localhost:8080', 'https://k-flix.netlify.app'];
 
 app.use(cors({
   origin: (origin, callback) => {
